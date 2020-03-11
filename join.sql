@@ -63,20 +63,71 @@ ORDER BY track_count DESC
 LIMIT 5;
 
 -- The top 5 genres by total track length (in milliseconds)
+SELECT genres.id, genres.name, SUM(milliseconds) AS total_track_length_milliseconds
+FROM genres
+JOIN tracks
+  ON (tracks.genre_id = genres.id)
+GROUP BY genres.id
+ORDER BY total_track_length_milliseconds DESC
+LIMIT 5;
 
 -- The top 5 genres by average track length (in milliseconds)
+SELECT genres.id, genres.name, AVG(milliseconds) AS avg_track_length_milliseconds
+FROM genres
+JOIN tracks
+  ON (tracks.genre_id = genres.id)
+GROUP BY genres.id
+ORDER BY avg_track_length_milliseconds DESC
+LIMIT 5;
 
 -- The top 5 albums by total track length
 -- Hint: you'll need to JOIN the albums table and the tracks table
 -- Hint: the tracks table has an album_id field
+SELECT albums.id, albums.title, SUM(milliseconds) AS total_track_length_milliseconds
+FROM albums
+JOIN tracks
+  ON (tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY total_track_length_milliseconds DESC
+LIMIT 5;
 
 -- The top 5 albums by average track length
+SELECT albums.id, albums.title, AVG(milliseconds) AS avg_track_length_milliseconds
+FROM albums
+JOIN tracks
+  ON (tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY avg_track_length_milliseconds DESC
+LIMIT 5;
 
 -- The top 5 albums by total album price
 -- Hint: the "tracks" table has a unit_price field, so the "price" of an album
 --       is the sum of its tracks' unit_price fields.
+SELECT albums.id, albums.title, SUM(unit_price) AS total_album_price
+FROM albums
+JOIN tracks
+  ON (tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY total_album_price DESC
+LIMIT 5;
+
 
 -- The 10 albums with the longest play-time
+SELECT albums.id, albums.title, SUM(milliseconds) AS total_track_length_milliseconds
+FROM albums
+JOIN tracks
+  ON (tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY total_track_length_milliseconds DESC
+LIMIT 10;
+  -- is this the same question as "The top 5 albums by total track length"?
 
 -- The 10 highest-selling tracks of all time
 -- Hint: you'll need to join the tracks table and the invoice_lines table
+SELECT tracks.name, SUM(tracks.unit_price) AS total_track_revenue
+FROM invoice_lines
+JOIN tracks
+  ON (tracks.id = invoice_lines.track_id)
+GROUP BY tracks.name
+ORDER BY total_track_revenue DESC
+LIMIT 10;
